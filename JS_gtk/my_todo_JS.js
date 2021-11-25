@@ -3,11 +3,6 @@ const Gtk = imports.gi.Gtk;
 
 let app = new Gtk.Application({ application_id: 'com.github.erikkohleisen.mytodoapp' });
 
-/*const cbObject = {
-    'buffer': null,
-    'list': null
-}*/
-
 app.connect('activate', () => {
     let win = new Gtk.ApplicationWindow({ application: app });
     win.set_title('My TODO App');
@@ -29,8 +24,7 @@ app.connect('activate', () => {
 
     let list = new Gtk.ListBox();
     list.set_show_separators(true);
-    let label = new Gtk.Label();
-    label.set_text('TODO list will be displayed here');
+    let label = new Gtk.Label({ label: 'TODO list will be displayed here' });
     list.set_placeholder(label);
 
     box.append(list);
@@ -39,19 +33,29 @@ app.connect('activate', () => {
     let input = new Gtk.Entry(buffer);
     input.placeholder_text = 'Todo';
 
-    let cbObject = {
-        'buffer': buffer,
-        'list': list
-    }
-
     let btn = new Gtk.Button({ label: 'Add' });
-    btn.connect('clicked', (cbObject) => {
+
+    btn.connect('clicked', () => {
+        if (input.text === '') return;
         let row = new Gtk.ListBoxRow();
-        let rowLabel = new Gtk.Label();
-        rowLabel.set_text(cbObject.buffer.get_text());
+        let rowLabel = new Gtk.Label({ label: input.text });
         row.set_child(rowLabel);
-        cbObject.list.append(row);
-        cbObject.buffer.delete_text(0, -1);
+        list.append(row);
+        input.set_text('');
+    });
+
+    input.connect('activate', () => {
+        if (input.text === '') return;
+        let row = new Gtk.ListBoxRow();
+        let rowLabel = new Gtk.Label({ label: input.text });
+        row.set_child(rowLabel);
+        list.append(row);
+        input.set_text('');
+    });
+
+    list.connect('row-activated', () => {
+        let row = list.get_selected_row();
+        list.remove(row);
     });
      
     grid.attach(input, 0, 0, 1, 1);

@@ -18,7 +18,7 @@ static void add_item_to_listBox (GtkWidget *widget, gpointer data)
     callBackObject *cb = (callBackObject*) data;
     GtkEntryBuffer *buffer = (GtkEntryBuffer*) cb->buf;
     GtkListBox *listBox = (GtkListBox*) cb->list;
-    GtkWidget * row = gtk_list_box_row_new ();
+    GtkWidget *row = gtk_list_box_row_new ();
 
     const char *text = gtk_entry_buffer_get_text (GTK_ENTRY_BUFFER (buffer));
 
